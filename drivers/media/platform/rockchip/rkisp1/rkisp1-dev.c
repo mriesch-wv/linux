@@ -445,6 +445,14 @@ static const struct rkisp1_match_data rk3399_isp_match_data = {
 	.isp_ver = RKISP1_V10,
 };
 
+static const struct rkisp1_match_data rk3568_isp_match_data = {
+	.clks = rk3399_isp_clks,
+	.clk_size = ARRAY_SIZE(rk3399_isp_clks),
+	.isrs = px30_isp_isrs,
+	.isr_size = ARRAY_SIZE(px30_isp_isrs),
+	.isp_ver = RKISP1_V12,
+};
+
 static const struct of_device_id rkisp1_of_match[] = {
 	{
 		.compatible = "rockchip,px30-cif-isp",
@@ -453,6 +461,10 @@ static const struct of_device_id rkisp1_of_match[] = {
 	{
 		.compatible = "rockchip,rk3399-cif-isp",
 		.data = &rk3399_isp_match_data,
+	},
+	{
+		.compatible = "rockchip,rk3568-isp",
+		.data = &rk3568_isp_match_data,
 	},
 	{},
 };
