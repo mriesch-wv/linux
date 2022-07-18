@@ -385,6 +385,7 @@ struct rkisp1_debug {
  */
 struct rkisp1_device {
 	void __iomem *base_addr;
+	void __iomem *mipi_addr;
 	struct device *dev;
 	unsigned int clk_size;
 	struct clk_bulk_data clks[RKISP1_MAX_BUS_CLK];
@@ -433,6 +434,18 @@ rkisp1_write(struct rkisp1_device *rkisp1, u32 val, unsigned int addr)
 static inline u32 rkisp1_read(struct rkisp1_device *rkisp1, unsigned int addr)
 {
 	return readl(rkisp1->base_addr + addr);
+}
+
+
+static inline void
+mipi_write(struct rkisp1_device *rkisp1, u32 val, unsigned int addr)
+{
+	writel(val, rkisp1->mipi_addr + addr);
+}
+
+static inline u32 mipi_read(struct rkisp1_device *rkisp1, unsigned int addr)
+{
+	return readl(rkisp1->mipi_addr + addr);
 }
 
 /*

@@ -526,6 +526,10 @@ static int rkisp1_probe(struct platform_device *pdev)
 	if (IS_ERR(rkisp1->base_addr))
 		return PTR_ERR(rkisp1->base_addr);
 
+	rkisp1->mipi_addr = devm_platform_ioremap_resource(pdev, 1);
+	if (IS_ERR(rkisp1->mipi_addr))
+		return PTR_ERR(rkisp1->mipi_addr);
+
 	for (i = 0; i < match_data->isr_size; i++) {
 		irq = (match_data->isrs[i].name) ?
 				platform_get_irq_byname(pdev, match_data->isrs[i].name) :

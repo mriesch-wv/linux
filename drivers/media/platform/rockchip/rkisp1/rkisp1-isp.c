@@ -404,12 +404,18 @@ static int rkisp1_config_dvp(struct rkisp1_device *rkisp1)
 
 static int rkisp1_config_mipi(struct rkisp1_device *rkisp1)
 {
-	//const struct rkisp1_isp_mbus_info *sink_fmt = rkisp1->isp.sink_fmt;
+	const struct rkisp1_isp_mbus_info *sink_fmt = rkisp1->isp.sink_fmt;
 	unsigned int lanes = rkisp1->active_sensor->lanes;
 	//u32 mipi_ctrl;
 
 	if (lanes < 1 || lanes > 4)
 		return -EINVAL;
+
+	mipi_write(rkisp1, 2 - 1, RKISP2_CIF_MIPI_CTRL1);
+	mipi_write(rkisp1, 0x3FFF, RKISP2_CIF_MIPI_CTRL2);
+	mipi_write(rkisp1, RKISP1_CIF_MIPI_DATA_SEL_DT(sink_fmt->mipi_dt) |
+		RKISP1_CIF_MIPI_DATA_SEL_VC(0), RKISP2_CIF_MIPI_DATA_IDS1);
+	//mipi_write(rkisp1, 0xFF000000, RKISP2_CIF_MIPI_MASK_STAT);
 #if 0
 	mipi_ctrl = RKISP1_CIF_MIPI_CTRL_NUM_LANES(lanes - 1) |
 		    RKISP1_CIF_MIPI_CTRL_SHUTDOWNLANES(0xf) |
@@ -1128,11 +1134,16 @@ void rkisp1_isp_unregister(struct rkisp1_device *rkisp1)
 
 irqreturn_t rkisp1_mipi_isr(int irq, void *ctx)
 {
-#if 0
 	struct device *dev = ctx;
 	struct rkisp1_device *rkisp1 = dev_get_drvdata(dev);
-	u32 val, status;
+	//u32 val, status;
+	u32 status;
 
+	status = mipi_read(rkisp1, RKISP2_CIF_MIPI_ERR_STAT);
+	if (!status)
+		return IRQ_NONE;
+
+#if 0
 	status = rkisp1_read(rkisp1, RKISP1_CIF_MIPI_MIS);
 	if (!status)
 		return IRQ_NONE;
