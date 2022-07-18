@@ -247,6 +247,7 @@ rkisp1_isp_get_pad_crop(struct rkisp1_isp *isp,
  */
 static void rkisp1_config_ism(struct rkisp1_device *rkisp1)
 {
+#if 0
 	struct v4l2_rect *src_crop =
 		rkisp1_isp_get_pad_crop(&rkisp1->isp, NULL,
 					RKISP1_ISP_PAD_SOURCE_VIDEO,
@@ -267,6 +268,7 @@ static void rkisp1_config_ism(struct rkisp1_device *rkisp1)
 	val = rkisp1_read(rkisp1, RKISP1_CIF_ISP_CTRL);
 	val |= RKISP1_CIF_ISP_CTRL_ISP_CFG_UPD;
 	rkisp1_write(rkisp1, val, RKISP1_CIF_ISP_CTRL);
+#endif
 }
 
 /*
@@ -402,13 +404,13 @@ static int rkisp1_config_dvp(struct rkisp1_device *rkisp1)
 
 static int rkisp1_config_mipi(struct rkisp1_device *rkisp1)
 {
-	const struct rkisp1_isp_mbus_info *sink_fmt = rkisp1->isp.sink_fmt;
+	//const struct rkisp1_isp_mbus_info *sink_fmt = rkisp1->isp.sink_fmt;
 	unsigned int lanes = rkisp1->active_sensor->lanes;
-	u32 mipi_ctrl;
+	//u32 mipi_ctrl;
 
 	if (lanes < 1 || lanes > 4)
 		return -EINVAL;
-
+#if 0
 	mipi_ctrl = RKISP1_CIF_MIPI_CTRL_NUM_LANES(lanes - 1) |
 		    RKISP1_CIF_MIPI_CTRL_SHUTDOWNLANES(0xf) |
 		    RKISP1_CIF_MIPI_CTRL_ERR_SOT_SYNC_HS_SKIP |
@@ -447,7 +449,7 @@ static int rkisp1_config_mipi(struct rkisp1_device *rkisp1)
 		rkisp1_read(rkisp1, RKISP1_CIF_MIPI_IMG_DATA_SEL),
 		rkisp1_read(rkisp1, RKISP1_CIF_MIPI_STATUS),
 		rkisp1_read(rkisp1, RKISP1_CIF_MIPI_IMSC));
-
+#endif
 	return 0;
 }
 
@@ -500,6 +502,7 @@ static void rkisp1_isp_stop(struct rkisp1_device *rkisp1)
 	 * ISP(mi) stop in mi frame end -> Stop ISP(mipi) ->
 	 * Stop ISP(isp) ->wait for ISP isp off
 	 */
+#if 0
 	/* stop and clear MI, MIPI, and ISP interrupts */
 	rkisp1_write(rkisp1, 0, RKISP1_CIF_MIPI_IMSC);
 	rkisp1_write(rkisp1, ~0, RKISP1_CIF_MIPI_ICR);
@@ -512,6 +515,7 @@ static void rkisp1_isp_stop(struct rkisp1_device *rkisp1)
 	val = rkisp1_read(rkisp1, RKISP1_CIF_MIPI_CTRL);
 	rkisp1_write(rkisp1, val & (~RKISP1_CIF_MIPI_CTRL_OUTPUT_ENA),
 		     RKISP1_CIF_MIPI_CTRL);
+#endif
 	/* stop ISP */
 	val = rkisp1_read(rkisp1, RKISP1_CIF_ISP_CTRL);
 	val &= ~(RKISP1_CIF_ISP_CTRL_ISP_INFORM_ENABLE |
@@ -556,12 +560,13 @@ static void rkisp1_isp_start(struct rkisp1_device *rkisp1)
 	u32 val;
 
 	rkisp1_config_clk(rkisp1);
-
 	/* Activate MIPI */
 	if (sensor->mbus_type == V4L2_MBUS_CSI2_DPHY) {
+#if 0
 		val = rkisp1_read(rkisp1, RKISP1_CIF_MIPI_CTRL);
 		rkisp1_write(rkisp1, val | RKISP1_CIF_MIPI_CTRL_OUTPUT_ENA,
 			     RKISP1_CIF_MIPI_CTRL);
+#endif
 	}
 	/* Activate ISP */
 	val = rkisp1_read(rkisp1, RKISP1_CIF_ISP_CTRL);
@@ -1123,6 +1128,7 @@ void rkisp1_isp_unregister(struct rkisp1_device *rkisp1)
 
 irqreturn_t rkisp1_mipi_isr(int irq, void *ctx)
 {
+#if 0
 	struct device *dev = ctx;
 	struct rkisp1_device *rkisp1 = dev_get_drvdata(dev);
 	u32 val, status;
@@ -1164,7 +1170,7 @@ irqreturn_t rkisp1_mipi_isr(int irq, void *ctx)
 	} else {
 		rkisp1->debug.mipi_error++;
 	}
-
+#endif
 	return IRQ_HANDLED;
 }
 

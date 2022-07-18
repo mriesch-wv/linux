@@ -31,6 +31,7 @@
 #define RKISP1_ISP_CC_COEFF(n) \
 			(RKISP1_CIF_ISP_CC_COEFF_0 + (n) * 4)
 
+#if 0
 static inline void
 rkisp1_param_set_bits(struct rkisp1_params *params, u32 reg, u32 bit_mask)
 {
@@ -1476,9 +1477,11 @@ static void rkisp1_params_apply_params_cfg(struct rkisp1_params *params,
 	cur_buf->vb.sequence = frame_sequence;
 	vb2_buffer_done(&cur_buf->vb.vb2_buf, VB2_BUF_STATE_DONE);
 }
+#endif
 
 void rkisp1_params_isr(struct rkisp1_device *rkisp1)
 {
+#if 0
 	/*
 	 * This isr is called when the ISR finishes processing a frame (RKISP1_CIF_ISP_FRAME).
 	 * Configurations performed here will be applied on the next frame.
@@ -1493,8 +1496,10 @@ void rkisp1_params_isr(struct rkisp1_device *rkisp1)
 	rkisp1_params_apply_params_cfg(params, frame_sequence);
 
 	spin_unlock(&params->config_lock);
+#endif
 }
 
+#if 0
 static const struct rkisp1_cif_isp_awb_meas_config rkisp1_awb_params_default_config = {
 	{
 		0, 0, RKISP1_DEFAULT_WIDTH, RKISP1_DEFAULT_HEIGHT
@@ -1568,14 +1573,17 @@ static void rkisp1_params_config_parameter(struct rkisp1_params *params)
 
 	spin_unlock_irq(&params->config_lock);
 }
+#endif
 
 void rkisp1_params_configure(struct rkisp1_params *params,
 			     enum rkisp1_fmt_raw_pat_type bayer_pat,
 			     enum v4l2_quantization quantization)
 {
+#if 0
 	params->quantization = quantization;
 	params->raw_type = bayer_pat;
 	rkisp1_params_config_parameter(params);
+#endif
 }
 
 /*
@@ -1584,6 +1592,7 @@ void rkisp1_params_configure(struct rkisp1_params *params,
  */
 void rkisp1_params_disable(struct rkisp1_params *params)
 {
+#if 0
 	rkisp1_param_clear_bits(params, RKISP1_CIF_ISP_DPCC_MODE,
 				RKISP1_CIF_ISP_DPCC_ENA);
 	rkisp1_param_clear_bits(params, RKISP1_CIF_ISP_LSC_CTRL,
@@ -1612,8 +1621,10 @@ void rkisp1_params_disable(struct rkisp1_params *params)
 	rkisp1_ie_enable(params, false);
 	rkisp1_param_clear_bits(params, RKISP1_CIF_ISP_DPF_MODE,
 				RKISP1_CIF_ISP_DPF_MODE_EN);
+#endif
 }
 
+#if 0
 static const struct rkisp1_params_ops rkisp1_v10_params_ops = {
 	.lsc_matrix_config = rkisp1_lsc_matrix_config_v10,
 	.goc_config = rkisp1_goc_config_v10,
@@ -1637,6 +1648,7 @@ static struct rkisp1_params_ops rkisp1_v12_params_ops = {
 	.hst_enable = rkisp1_hst_enable_v12,
 	.afm_config = rkisp1_afm_config_v12,
 };
+#endif
 
 static int rkisp1_params_enum_fmt_meta_out(struct file *file, void *priv,
 					   struct v4l2_fmtdesc *f)
@@ -1804,10 +1816,12 @@ static void rkisp1_init_params(struct rkisp1_params *params)
 	params->vdev_fmt.fmt.meta.buffersize =
 		sizeof(struct rkisp1_params_cfg);
 
+#if 0
 	if (params->rkisp1->media_dev.hw_revision == RKISP1_V12)
 		params->ops = &rkisp1_v12_params_ops;
 	else
 		params->ops = &rkisp1_v10_params_ops;
+#endif
 }
 
 int rkisp1_params_register(struct rkisp1_device *rkisp1)

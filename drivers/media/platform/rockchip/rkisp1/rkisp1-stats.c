@@ -174,6 +174,7 @@ rkisp1_stats_init_vb2_queue(struct vb2_queue *q, struct rkisp1_stats *stats)
 	return vb2_queue_init(q);
 }
 
+#if 0
 static void rkisp1_stats_get_awb_meas_v10(struct rkisp1_stats *stats,
 					  struct rkisp1_stat_buffer *pbuf)
 {
@@ -400,9 +401,11 @@ rkisp1_stats_send_measurement(struct rkisp1_stats *stats, u32 isp_ris)
 	cur_buf->vb.vb2_buf.timestamp = timestamp;
 	vb2_buffer_done(&cur_buf->vb.vb2_buf, VB2_BUF_STATE_DONE);
 }
+#endif
 
 void rkisp1_stats_isr(struct rkisp1_stats *stats, u32 isp_ris)
 {
+#if 0
 	struct rkisp1_device *rkisp1 = stats->rkisp1;
 	unsigned int isp_mis_tmp = 0;
 
@@ -418,6 +421,7 @@ void rkisp1_stats_isr(struct rkisp1_stats *stats, u32 isp_ris)
 		rkisp1_stats_send_measurement(stats, isp_ris);
 
 	spin_unlock(&stats->lock);
+#endif
 }
 
 static void rkisp1_init_stats(struct rkisp1_stats *stats)
@@ -426,11 +430,13 @@ static void rkisp1_init_stats(struct rkisp1_stats *stats)
 		V4L2_META_FMT_RK_ISP1_STAT_3A;
 	stats->vdev_fmt.fmt.meta.buffersize =
 		sizeof(struct rkisp1_stat_buffer);
-
+#if 0
 	if (stats->rkisp1->media_dev.hw_revision == RKISP1_V12)
 		stats->ops = &rkisp1_v12_stats_ops;
 	else
 		stats->ops = &rkisp1_v10_stats_ops;
+
+#endif
 }
 
 int rkisp1_stats_register(struct rkisp1_device *rkisp1)
